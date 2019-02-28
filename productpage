@@ -1,0 +1,128 @@
+File location - /public_html/app/code/vendor name /module name/view/frontend/templates/catalog/product/view 
+
+<?php
+
+/** @var $block \Magento\Catalog\Block\Product\View */
+?>
+<?php $_product = $block->getProduct(); ?>
+<?php $buttonTitle = __('Add to Cart'); ?>
+<?php if ($_product->isSaleable()): ?>
+<div class="box-tocart">
+    <div class="fieldset">
+        <?php if ($block->shouldRenderQuantity()): ?>
+        <div class="field qty">
+            <label class="label" for="qty"><span><?php /* @escapeNotVerified */ echo __('Qty') ?></span></label>
+            <div class="control">
+                <span class="minus"><button type="button" title="<?= __('Reduce the quantity'); ?>">-</button></span>
+                <input type="number"
+                       name="qty"
+                       id="qty"
+                       maxlength="12"
+                       value="<?php /* @escapeNotVerified */ echo $block->getProductDefaultQty() * 1 ?>"
+                       title="<?php /* @escapeNotVerified */ echo __('Qty') ?>" class="input-text qty"
+                       data-validate="<?php echo $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
+                       />
+                <span class="plus"><button type="button" title="<?= __('Increase the quantity'); ?>" />+</button></span>
+                <script type="text/javascript">
+                    // This is the javascript codes help us to increase and decrease qty
+                    require(['jquery'], function($) {
+                        $('.box-tocart .minus').on('click', function() {
+                            var qty = parseInt($('#qty').val());
+                            qty = qty - 1;
+                            $('#qty').val(qty).trigger('change');
+                        });
+                        $('.box-tocart .plus').on('click', function() {
+                            var qty = parseInt($('#qty').val());
+                            qty = qty + 1;
+                            $('#qty').val(qty).trigger('change');
+                        });
+                        $('#qty').on('change', function() {
+                            var qty = parseInt($(this).val());
+                            if (qty > 100) {
+                                $(this).val('100');
+                            } else if (qty < 1) {
+                                $(this).val('1');
+                            }
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+        <?php endif; ?>
+        <div class="actions">
+            <button type="submit"
+                    title="<?php /* @escapeNotVerified */ echo $buttonTitle ?>"
+                    class="action primary tocart"
+                    id="product-addtocart-button">
+                <span><?php /* @escapeNotVerified */ echo $buttonTitle ?></span>
+            </button>
+            <?php echo $block->getChildHtml('', true) ?>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+<?php if ($block->isRedirectToCartEnabled()) : ?>
+    <script type="text/x-magento-init">
+    {
+        "#product_addtocart_form": {
+            "Magento_Catalog/product/view/validation": {
+                "radioCheckboxClosest": ".nested"
+            }
+        }
+    }
+</script>
+<?php else : ?>
+    <script type="text/x-magento-init">
+    {
+        "#product_addtocart_form": {
+            "Magento_Catalog/js/validate-product": {}
+        }
+    }
+</script>
+<?php endif; ?>
+
+
+<!-- below is the social code -->
+
+
+<?php
+/**
+* Copyright © Magento, Inc. All rights reserved.
+* See COPYING.txt for license details.
+*/
+// @codingStandardsIgnoreFile
+/** @var $block \Magento\Catalog\Block\Product\View */
+?>
+<style type="text/css" media="screen">
+.fb-like {
+    display: block!important;
+}  
+</style>
+<div class="social1">
+<div id="fb-root"></div>
+<script>
+(
+function(d, s, id) 
+{
+ var js, fjs = d.getElementsByTagName(s)[0];
+ if (d.getElementById(id)) return;
+ js = d.createElement(s); js.id = id;
+ js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.11';
+ fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<div class="fb-like" data-href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];  ?>" data-layout="standard" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
+<!-- TWITTER <?php //echo $this->getViewFileUrl('images/tw.png'); ?> -->
+<a href="http://twitter.com/home/?status=<?php echo urlencode($_product->getProductUrl());?>(<?php echo urlencode($_product->getName())?>)" onclick='javascript:window.open(this.href,"","width=640,height=480,left=0,top=0,location=no,status=yes,scrollbars=yes,resizable=yes");return false' title="Share on Twitter">
+<img src="http://foxrobe.com.cp-ht-10.webhostbox.net/twitter.png" alt="Twitter" width="5%">
+</a>
+
+<!-- google -->
+<a href="https://plus.google.com/share?url=<?php echo urlencode($_product->getProductUrl());?>(<?php echo urlencode($_product->getName())?>)" onclick='javascript:window.open(this.href,"","width=640,height=480,left=0,top=0,location=no,status=yes,scrollbars=yes,resizable=yes");return false' title="Share on Google">
+<img src="https://www.gstatic.com/images/icons/gplus-32.png" alt="Google" width="5%">
+</a>
+
+
+</div>
+
+ 
+ 
